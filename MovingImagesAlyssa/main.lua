@@ -8,7 +8,8 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- global variables
-scrollSpeed = 7
+scrollSpeedBeetleship = 7
+scrollSpeedRocketship = 6
 
 -- background image with width and height 
 local backgroundImage = display.newImageRect("Images/background.png", 2048, 1536)
@@ -23,19 +24,19 @@ beetleship.alpha = 0
 beetleship.x = 0
 beetleship.y = display.contentHeight/3
 
--- Functon: MoveShip
+-- Functon: MoveBeetleship
 -- Input: this function accepts an event listener
 -- output: none
 -- description: This function adds the scroll speed to the x-value of the ship
-local function MoveShip(event)
+local function MoveBeetleship(event)
 	-- add the scroll speed to the x-value of the ship
-	beetleship.x = beetleship.x + scrollSpeed
-	-- change the transparency of the ship every timeit moves sp that it fades out
+	beetleship.x = beetleship.x + scrollSpeedBeetleship
+	-- change the transparency of the ship every time it moves so that it fades in
 	beetleship.alpha = beetleship.alpha + 0.025
 end
 
--- MoveShip wil be called over and over again
-Runtime:addEventListener("enterFrame", MoveShip)
+-- MoveBeetleship wil be called over and over again
+Runtime:addEventListener("enterFrame", MoveBeetleship)
 
 -- second character image with width and height
 local rocketship = display.newImageRect("Images/rocketship.png", 300, 300)
@@ -45,4 +46,24 @@ rocketship.alpha = 1
 
 -- set the initial x and y position of rocketship
 rocketship.x = 2024
-rocketship.y = display.contentHeight
+rocketship.y = display.contentHeight * 2/3
+
+-- changes direction of the ship
+rocketship:scale (-1, 1)
+
+-- Function: MoveRocketship
+-- Input: this function accepts an event listener
+-- Output: none
+-- Description: this function adds the scroll speed to the x-value of the ship
+local function MoveRocketship(event)
+	-- add the scroll speed to the x-valaue of the ship
+	rocketship.x = rocketship.x - scrollSpeedRocketship
+	-- change the transparencyof the ship so that it fades out
+	rocketship.alpha = rocketship.alpha - 0.000001
+	-- changes the scale of the ship
+	rocketship.xScale = 2
+	rocketship.yScale = 2
+end
+
+-- MoveRocketship over and over again
+Runtime:addEventListener("enterFrame", MoveRocketship)
