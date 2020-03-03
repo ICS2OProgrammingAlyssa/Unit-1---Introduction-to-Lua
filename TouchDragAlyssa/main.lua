@@ -89,3 +89,30 @@ end
 
 -- add the receptive listener
 blueGirl:addEventListener("touch", BlueGirlListener)
+
+-- Function: StarListener
+-- Input: touch listener
+-- Output: none
+-- Description: when star is touched, move it
+local function StarListener(touch)
+
+	if(touch.phase == "began") then
+		if (alreadyTouchedBlueGirl == false) and (alreadyTouchedPinkGirl == false) then
+			alreadyTouchedStar = true
+		end
+	end
+
+	if ( (touch.phase == "moved") and (alreadyTouchedStar == true) ) then
+		star.x = touch.x
+		star.y = touch.y
+	end
+
+	if (touch.phase == "end") then
+		alreadyTouchedStar = false
+		alreadyTouchedPinkGirl = false
+		alreadyTouchedBlueGirl = false
+	end
+end
+
+-- add the receptive listener
+star:addEventListener("touch", StarListener)
