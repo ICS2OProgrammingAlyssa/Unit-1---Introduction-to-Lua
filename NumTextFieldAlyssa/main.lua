@@ -24,6 +24,8 @@ local randomNumber1
 local randomNumber2
 local userAnswer
 local correctAnswer
+local points = 0
+local pointsText
 
 -------------------------------------------------------------------------------------------------
 -- LOCAL FUNCIONS
@@ -95,3 +97,6 @@ incorrectObject.isVisible = false
 -- create a numeric text field
 numericField = native.newTextField( display.contentWidth/2, display.contentHeight/2, 150, 80)
 numericField.inputType = "number"
+
+-- add the event listener for the numeric field
+numericField:addEventListener( "userInput", NumericFieldListener)
