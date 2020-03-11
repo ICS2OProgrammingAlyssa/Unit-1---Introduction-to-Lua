@@ -24,6 +24,8 @@ local randomNumber1
 local randomNumber2
 local userAnswer
 local correctAnswer
+local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
+local incorectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 local points = 0
 local pointsText
 
@@ -33,7 +35,7 @@ local pointsText
 
 local function AskQuestion()
 	-- generate 2 random numbers between a max. and a min. number
-	randomNumber1 = math.ramdom(0, 8)
+	randomNumber1 = math.random(0, 8)
 	randomNumber2 = math.random(0, 8)
 
 	correctAnswer = randomNumber1 + randomNumber2
@@ -70,9 +72,14 @@ local function NumericFieldListener( event )
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
 			timer.performWithDelay(1500, HideCorrect)
+			audio.play( correctSound )
+			event.target.text = ""
 
 		else incorrectObject.isVisible = true
 			timer.performWithDelay(1500, HideIncorrect)
+			audio.play( incorectSound )
+			event.target.text = ""
+		end
 
 	end
 end
@@ -82,7 +89,7 @@ end
 ----------------------------------------------------------------------------------------------
 
 -- displays a question and sets the color
-questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 50 )
+questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 75 )
 questionObject:setTextColor( 20/255, 113/255, 235/255 )
 
 -- create the correct answer text object and make it invisible
@@ -95,8 +102,28 @@ incorrectObject:setTextColor(245/255, 10/255, 10/255)
 incorrectObject.isVisible = false
 
 -- create a numeric text field
-numericField = native.newTextField( display.contentWidth/2, display.contentHeight/2, 150, 80)
+numericField = native.newTextField( display.contentWidth*3/5, display.contentHeight/2, 200, 80)
 numericField.inputType = "number"
 
 -- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
+
+-- displays the points the user has
+
+pointsText = display.newText("Points: " .. points, display.contentWidth/6, display.contentHeight/7, nil, 50)
+
+----------------------------------------------------------------------------------------------------
+-- FUNCTION CALLS
+----------------------------------------------------------------------------------------------------
+
+-- display the points on the screen
+if (userAnswer == correctAnswer) then
+	-- give a point if the user gets the correct answer
+	points = points + 1
+
+	-- update it in the display object
+	pointsText.text = "Points: " .. points
+end
+
+-- call the function to ask the question
+AskQuestion()
