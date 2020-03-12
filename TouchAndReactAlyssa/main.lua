@@ -32,6 +32,10 @@ local checkmark = display.newImageRect("Images/checkmark.png", 130, 130)
 checkmark.x = display.contentWidth * 3/4
 checkmark.y = display.contentHeight/2
 checkmark.isVisible = false
+
+-- create the correct sound effect
+local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
+
 -- Function:BlueButtonListener
 -- Input: touch listener
 -- Output: none
@@ -43,6 +47,7 @@ local function BlueButtonListener(touch)
 		redButton.isVisible = true
 		textObject.isVisible = true
 		checkmark.isVisible = true
+		audio.play( correctSound )
 	end
 
 	if (touch.phase == "ended") then
@@ -80,3 +85,6 @@ end
 
 -- add the receptive listener
 redButton:addEventListener("touch", RedButtonListener)
+
+
+	

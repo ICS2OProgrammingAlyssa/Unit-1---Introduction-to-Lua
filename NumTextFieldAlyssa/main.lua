@@ -81,8 +81,8 @@ local function NumericFieldListener( event )
 			pointsText.text = "Points: " .. points
 
 		else incorrectObject.isVisible = true
-			timer.performWithDelay(1500, HideIncorrect)
-			audio.play( incorectSound )
+			timer.performWithDelay( 1500, HideIncorrect)
+			audio.play( incorrectSound )
 			event.target.text = ""
 		end
 
@@ -110,8 +110,8 @@ incorrectObject.isVisible = false
 numericField = native.newTextField( display.contentWidth*3/5, display.contentHeight/2, 200, 80)
 numericField.inputType = "number"
 
--- add the event listener for the numeric field
-numericField:addEventListener( "userInput", NumericFieldListener)
+-- add the event lstener for the numeric field
+numericField:addEventListener( "userInput", NumericFieldListener )
 
 ----------------------------------------------------------------------------------------------------
 -- FUNCTION CALLS
