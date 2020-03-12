@@ -102,6 +102,7 @@ correctObject = display.newText( "Correct!! :)", display.contentWidth/2, display
 correctObject:setTextColor(15/255, 243/255, 45/255)
 correctObject.isVisible = false
 
+-- create the incorrect answer text object and make it invisible
 incorrectObject = display.newText( "Incorrect. :(", display.contentWidth/2, display.contentHeight*2/3, nil, 50)
 incorrectObject:setTextColor(245/255, 10/255, 10/255)
 incorrectObject.isVisible = false
@@ -110,7 +111,7 @@ incorrectObject.isVisible = false
 numericField = native.newTextField( display.contentWidth*3/5, display.contentHeight/2, 200, 80)
 numericField.inputType = "number"
 
--- add the event lstener for the numeric field
+-- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener )
 
 ----------------------------------------------------------------------------------------------------
