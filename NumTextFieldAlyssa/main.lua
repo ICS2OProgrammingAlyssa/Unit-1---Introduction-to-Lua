@@ -28,7 +28,8 @@ local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
 local incorectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 local points = 0
 local pointsText
-
+pointsText = display.newText("Points: " .. points, display.contentWidth/6, display.contentHeight/7, nil, 50)
+pointsText:setTextColor(0.3, 0.3, 0.3)
 -------------------------------------------------------------------------------------------------
 -- LOCAL FUNCIONS
 -------------------------------------------------------------------------------------------------
@@ -74,6 +75,10 @@ local function NumericFieldListener( event )
 			timer.performWithDelay(1500, HideCorrect)
 			audio.play( correctSound )
 			event.target.text = ""
+			-- give a ponit to the user
+			points = points + 1
+			-- update the text
+			pointsText.text = "Points: " .. points
 
 		else incorrectObject.isVisible = true
 			timer.performWithDelay(1500, HideIncorrect)
@@ -108,22 +113,9 @@ numericField.inputType = "number"
 -- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
 
--- displays the points the user has
-
-pointsText = display.newText("Points: " .. points, display.contentWidth/6, display.contentHeight/7, nil, 50)
-
 ----------------------------------------------------------------------------------------------------
 -- FUNCTION CALLS
 ----------------------------------------------------------------------------------------------------
-
--- display the points on the screen
-if (userAnswer == correctAnswer) then
-	-- give a point if the user gets the correct answer
-	points = points + 1
-
-	-- update it in the display object
-	pointsText.text = "Points: " .. points
-end
 
 -- call the function to ask the question
 AskQuestion()
