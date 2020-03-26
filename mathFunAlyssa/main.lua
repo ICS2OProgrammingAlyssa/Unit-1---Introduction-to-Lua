@@ -15,7 +15,6 @@ display.setDefault("background", 229/255, 243/255, 255/255)
 -------------------------------------------------------------------------------------------
 
 -- create the variables
-
 local questionObject                                                                        
 local correctObject                                                                       
 local incorrectObject
@@ -26,7 +25,7 @@ local userAnswer
 local correctAnswer
 local correctSound
 local incorrectSound
-local points
+local points = 0
 local pointsText
 local randomOperator                                                                                 
 
@@ -39,7 +38,7 @@ questionObject = display.newText( "", display.contentWidth/3, display.contentHei
 questionObject:setTextColor(98/255, 98/255, 98/255)
 
 -- create the correct answer text object, make it invisible, and set the color
-correctObject = display.newText( "Correct!! :)", display.contentWidth/2, display.contentHeight*2/3)
+correctObject = display.newText( "Correct!! :)", display.contentWidth/2, display.contentHeight*2/3, nil, 50)
 correctObject:setTextColor(15/255, 243/255, 10/255)
 correctObject.isVisible = false
 
@@ -50,10 +49,15 @@ incorrectObject.isVisible = false
 
 -- create a numeric text field
 numericField = native.newTextField( display.contentWidth*3/5, display.contentHeight/2, 200, 80)
-numericField.inputType = "number"
+numericField.inputType = "decimal"
 
--- add the event listener for the numeric field
-numericField:addEventListener( "userInput", NumericFieldListener )
+-- display the points text and change to color
+pointsText = display.newText("Points: " .. points, display.contentWidth/6, display.contentHeight/7, nil, 50)
+pointsText:setTextColor(98/255, 98/255, 98/255)
+
+-- create the correct and incorrect correct sound 
+correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
+incorrectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 
 -------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -64,8 +68,8 @@ local function AskQuestion()
 	randomOperator = math.random(1,4)
 
 	-- generate 2 random numbers
-	randomNumber1 = math.random(0,4)
-	randomNumber2 = math.random(0,4)
+	randomNumber1 = math.random(0,5)
+	randomNumber2 = math.random(5,10)
 
 	-- if the random operator is 1, then do addition
 	if (randomOperator == 1) then
@@ -78,10 +82,10 @@ local function AskQuestion()
 	-- if the random operator is 2, do subtraction
 	elseif (randomOperator == 2) then
 		-- calculate the correct answer
-		correctAnswer = randomNumber1 - randomNumber2
+		correctAnswer = randomNumber2 - randomNumber1
 
 		-- create question in text object
-		questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
+		questionObject.text = randomNumber2 .. " - " .. randomNumber1 .. " = "
 
     -- if the random operator is 3, then do multiplication
 	elseif (randomOperator == 3) then
@@ -96,8 +100,57 @@ local function AskQuestion()
 		-- calculate the correct answer
 		correctAnswer = randomNumber1 / randomNumber2
 
+		-- round to 1 decimal place
+		math.round(correctAnswer)
+
+
 		-- create question in text object
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+	end
+end
+
+local function HideCorrect()
+	correctObject.isVisible = false
+	AskQuestion()
+end
+
+local function HideIncorrect()
+	incorrectObject.isVisible = false
+	AskQuestion()
+end
+
+local function NumericFieldListener( event )
+
+	-- user begins editing "numericField"
+	if ( event.phase == "began" ) then
+
+		-- clear text field
+		event.target.text = ""
+
+	elseif ( event.phase == "submitted" ) then
+
+		-- when the answer is submitted (enter key is pressed) set user input to users answer
+		userAnswer = tonumber(event.target.text)
+
+		-- if the users answer is correct:
+		if (userAnswer == correctAnswer) then
+			correctObject.isVisible = true
+			timer.performWithDelay( 1500, HideCorrect )
+            audio.play( correctSound )
+			event.target.text = ""
+
+			-- give the user a point
+			points = points + 1
+
+			--update the text
+			pointsText.text = "Points: " .. points
+
+		-- if the user gets the answer Wrong
+		else incorrectObject.isVisible = true
+			timer.performWithDelay( 1500, HideIncorrect )
+			audio.play( incorrectSound )
+			event.target.text = ""
+		end
 	end
 end
 
@@ -107,3 +160,6 @@ end
 
 -- call the function to ask the question
 AskQuestion()
+
+-- add the event listenr to the numeric field
+numericField:addEventListener( "userInput", NumericFieldListener )
