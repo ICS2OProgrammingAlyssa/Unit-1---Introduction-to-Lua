@@ -28,6 +28,8 @@ local incorrectSound
 local points = 0
 local pointsText
 local randomOperator                                                                                 
+local backgroundMusic
+local backgroundMusicChannel
 
 -------------------------------------------------------------------------------------------
 -- OBJECT CREATION              
@@ -59,9 +61,15 @@ pointsText:setTextColor(98/255, 98/255, 98/255)
 correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
 incorrectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 
+-- create the background music
+backgroundMusic = audio.loadSound( "Sounds/bensound-littleidea.mp3" )
+
 -------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -------------------------------------------------------------------------------------------
+
+-- play background music
+backgroundMusicChannel = audio.play(backgroundMusic)
 
 local function AskQuestion()
 	-- generate a random number between 1 and 4

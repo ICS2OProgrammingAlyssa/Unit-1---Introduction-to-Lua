@@ -14,6 +14,10 @@ scrollSpeedRocketship = 6
 -- background image with width and height 
 local backgroundImage = display.newImageRect("Images/background.png", 2048, 1536)
 
+-- background music
+local backgroundMusic = audio.loadSound( "Sounds/bensound-straight.mp3" )
+local backgroundMusicChannel
+
 -- character image with width and height
 local beetleship = display.newImageRect("Images/beetleship.png", 200, 200)
 
@@ -23,6 +27,9 @@ beetleship.alpha = 0
 -- set the initial x and y position of beetleship
 beetleship.x = 0
 beetleship.y = display.contentHeight/3
+
+-- play background music
+backgroundMusicChannel = audio.play(backgroundMusic)
 
 -- Functon: MoveBeetleship
 -- Input: this function accepts an event listener
