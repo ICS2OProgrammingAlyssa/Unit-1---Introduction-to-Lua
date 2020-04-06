@@ -25,7 +25,7 @@ local randomNumber2
 local userAnswer
 local correctAnswer
 local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
-local incorectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
+local incorrectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 local points = 0
 local pointsText = display.newText("Points: " .. points, display.contentWidth/6, display.contentHeight/7, nil, 50)
 pointsText:setTextColor(0.3, 0.3, 0.3)

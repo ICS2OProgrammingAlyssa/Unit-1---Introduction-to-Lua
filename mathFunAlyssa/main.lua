@@ -109,8 +109,9 @@ local function AskQuestion()
 		correctAnswer = randomNumber1 / randomNumber2
 
 		-- round to 1 decimal place
-		math.round(correctAnswer)
-
+		correctAnswer = correctAnswer * 10
+		correctAnswer = math.round(correctAnswer)
+		correctAnswer = correctAnswer / 10
 
 		-- create question in text object
 		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
