@@ -204,7 +204,6 @@ end
 
 local function HideIncorrect()
 	incorrectObject.isVisible = false
-	correctAnswerObject.isVisible = false
 	AskQuestion()
 end
 
