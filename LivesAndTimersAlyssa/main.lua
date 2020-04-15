@@ -1,7 +1,7 @@
 -- Title: LivesAndTimers
 -- Name: Alyssa
 -- Course: ICS2O
--- This program gives the user a certain ammount of time to answer the question
+-- This program gives the user a certain amount of time to answer the question
 -- and loses a life if the they get the question wrong or run out of time.
 
 
@@ -20,8 +20,6 @@ local totalSeconds = 10
 local secondsLeft = 10
 local clockText
 local countDownTimer
-
--- create the variables
 local lives = 4
 local heart1
 local heart2
@@ -32,8 +30,14 @@ local questionObject
 local correctObject                                                                       
 local incorrectObject
 local numericField                                                                        
-local randomNumber1
-local randomNumber2
+local randomNumber1Add
+local randomNumber1Sub
+local randomNumber2Sub
+local randomNumber2Add
+local randomNumber1Multi
+local randomNumber2Multi
+local randomNumber1Devi
+local randomNumber2Devi
 local userAnswer
 local correctAnswer
 local correctSound
@@ -71,8 +75,8 @@ pointsText = display.newText("Points: " .. points, display.contentWidth/6, displ
 pointsText:setTextColor(98/255, 98/255, 98/255)
 
 -- create the correct and incorrect correct sound 
-correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
-incorrectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
+correctSound = audio.loadSound( "Sounds/Correct sound.mp3" )
+incorrectSound = audio.loadSound( "Sounds/Wrong sound.mp3" )
 
 -- create the background music
 backgroundMusic = audio.loadSound( "Sounds/bensound-littleidea.mp3" )
@@ -101,12 +105,6 @@ heart4.isVisible = true
 -- create the clock object
 clockText = display.newText( secondsLeft .. "", display.contentWidth/2, display.contentHeight*6/7, nil, 50 )
 clockText:setTextColor(98/255, 98/255, 98/255)
-
--- create the game over screen
-gameOver = display.newImageRect("Images/gameOver.png", 1024, 768)
-gameOver.x = display.contentWidth/2
-gameOver.y = display.contentHeight/2
-gameOver.isVisible = false
 
 -------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -144,43 +142,49 @@ end
 
 
 local function AskQuestion()
-	--reset timer
-	
+	-- create the timer
+	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
 	-- generate a random number between 1 and 4
 	randomOperator = math.random(1,4)
 
-	-- generate 2 random numbers
-	randomNumber1 = math.random(0,5)
-	randomNumber2 = math.random(5,10)
+	-- generate 2 random numbers for each operation possibility
+	randomNumber1Add = math.random(1,20)
+	randomNumber2Add = math.random(1,20)
+	randomNumber1Sub = math.random(1,10)
+	randomNumber2Sub = math.random(11,20)
+	randomNumber1Multi = math.random(1,10)
+	randomNumber2Multi = math.random(1,10)
+	randomNumber1Devi = math.random(1,100)
+	randomNumber2Devi = math.random(1,100)
 
 	-- if the random operator is 1, then do addition
 	if (randomOperator == 1) then
         -- calculate the correct answer
-		correctAnswer = randomNumber1 + randomNumber2
+		correctAnswer = randomNumber1Add + randomNumber2Add
 
 		-- create question in text object
-		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
+		questionObject.text = randomNumber1Add .. " + " .. randomNumber2Add .. " = "
 
 	-- if the random operator is 2, do subtraction
 	elseif (randomOperator == 2) then
 		-- calculate the correct answer
-		correctAnswer = randomNumber2 - randomNumber1
+		correctAnswer = randomNumber2Sub - randomNumber1Sub
 
 		-- create question in text object
-		questionObject.text = randomNumber2 .. " - " .. randomNumber1 .. " = "
+		questionObject.text = randomNumber2Sub .. " - " .. randomNumber1Sub .. " = "
 
     -- if the random operator is 3, then do multiplication
 	elseif (randomOperator == 3) then
 		-- calculate the correct answer
-		correctAnswer = randomNumber1 * randomNumber2
+		correctAnswer = randomNumber1Multi * randomNumber2Multi
 
 		-- create question in text object
-		questionObject.text = randomNumber1 .. " x " .. randomNumber2 .. " = "
+		questionObject.text = randomNumber1Multi .. " x " .. randomNumber2Multi .. " = "
 
      -- if the random operator is 4, then do division
 	elseif (randomOperator == 4) then
 		-- calculate the correct answer
-		correctAnswer = randomNumber1 / randomNumber2
+		correctAnswer = randomNumber1Devi / randomNumber2Devi
 
 		-- round to 1 decimal place
 		correctAnswer = correctAnswer * 10
@@ -189,7 +193,7 @@ local function AskQuestion()
 
 
 		-- create question in text object
-		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+		questionObject.text = randomNumber1Devi .. " / " .. randomNumber2Devi .. " = "
 	end
 end
 
@@ -200,6 +204,7 @@ end
 
 local function HideIncorrect()
 	incorrectObject.isVisible = false
+	correctAnswerObject.isVisible = false
 	AskQuestion()
 end
 
@@ -222,6 +227,7 @@ local function NumericFieldListener( event )
 			timer.performWithDelay( 1500, HideCorrect )
             audio.play( correctSound )
 			event.target.text = ""
+			timer.cancel(countDownTimer)
 
 			-- give the user a point
 			points = points + 1
@@ -234,20 +240,10 @@ local function NumericFieldListener( event )
 			timer.performWithDelay( 1500, HideIncorrect )
 			audio.play( incorrectSound )
 			event.target.text = ""
+			timer.cancel(countDownTimer)
 		end
 	end
 end
-
--- function that cllas the timer
-local function StartTimer()
-	-- create a countdown timer that loops infinitely
-	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
-end
-
--- display the game over screen when all lives are lost
-if (lives == 0) then
-	timer.cancel( StartTimer )
-
 
 ------------------------------------------------------------------------------------------
 -- FUNCTION CALLS
@@ -255,9 +251,9 @@ if (lives == 0) then
 
 -- call the function to ask the question
 AskQuestion()
+UpdateTime()
 
--- add the event listenr to the numeric field
+-- add the event listener to the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener )
 
 
-UpdateTime()
