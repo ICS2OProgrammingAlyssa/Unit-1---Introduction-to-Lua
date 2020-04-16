@@ -2,7 +2,7 @@
 -- Title: PhysicsAndCollisions
 -- Name: Alyssa
 -- Course: ICS2O
--- This program...
+-- This program adds physics to ImagesZ
 -------------------------------------------------------------
 
 -- hide the status bar
